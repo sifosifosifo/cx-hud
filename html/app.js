@@ -20,6 +20,7 @@ const gearDisplay     = document.getElementById('gearVal')
 const redlineMarker = document.getElementById('redlineMarker')
 
 const voiceRingContainer = document.getElementById('comp-voice')
+const radioList = document.getElementById('radioList')
 
 const elPlayerId   = document.getElementById('playerId')
 const elJobLabel   = document.getElementById('jobLabel')
@@ -105,6 +106,7 @@ const hudState = {
     portrait: true, charname: true, voice: true, playerid: false,
     logo: true, job: true, cash: true, bank: true,
     minimap: true, minimapBorder: true, streetPill: true, streetclock: true, streetCompass: true, statusRow: true,
+    radioList: true,
     psBuffRow: true,
     health: true, armor: true, hunger: true, thirst: true,
     vehicle: true, lights: true, cinebars: false, weapon: true,
@@ -116,6 +118,7 @@ let hideMapAndStreetOnFoot = false
 let statusInVehicle = false
 let usePSBuffs = false
 const psBuffState = {}
+const radioPlayers = new Map()
 
 const vehicleViewState = {
     show: false,
@@ -261,6 +264,7 @@ function applyVisibility() {
     if (elStatusRow) {
         elStatusRow.classList.toggle('hidden', !(hudState.statusRow && (hudState.health || hudState.armor || hudState.hunger || hudState.thirst)))
     }
+    if (radioList) radioList.classList.toggle('hidden', !hudState.radioList || radioList.dataset.radioVisible !== 'true')
     if (elPsBuffRow) {
         const hasBuffs = Object.keys(psBuffState).length > 0
         const editorOpen = typeof edIsOpen !== 'undefined' && edIsOpen()
@@ -278,6 +282,57 @@ function applyVisibility() {
     if (borderRing) {
         const hideMinimapOnFoot = hideMapAndStreetOnFoot && !statusInVehicle
         borderRing.classList.toggle('hidden', !(hudState.minimap && hudState.minimapBorder) || hideMinimapOnFoot)
+    }
+}
+
+function renderRadioList(data) {
+    if (!radioList || !data) return
+
+    if (data.clearRadioList) {
+        radioPlayers.clear()
+        radioList.innerHTML = ''
+    }
+
+    if (data.radioId != null) {
+        const playerId = String(data.radioId)
+        if (data.radioName != null) {
+            radioPlayers.set(playerId, {
+                name: String(data.radioName),
+                self: !!data.self,
+                talking: false,
+            })
+        } else if (data.radioTalking != null) {
+            const player = radioPlayers.get(playerId)
+            if (player) player.talking = !!data.radioTalking
+        } else {
+            radioPlayers.delete(playerId)
+        }
+    }
+
+    if (data.changeVisibility) {
+        radioList.dataset.radioVisible = data.visible ? 'true' : 'false'
+        radioList.classList.toggle('hidden', !data.visible || !hudState.radioList)
+    }
+
+    if (data.radioName != null || data.radioTalking != null || data.radioId != null && !data.radioName && data.radioTalking == null || data.changeVisibility && data.channel != null) {
+        const rows = [...radioPlayers.values()]
+        radioList.innerHTML = ''
+        if (data.channel != null || rows.length > 0) {
+            const header = document.createElement('div')
+            header.className = 'radio-list-header'
+            const headerIcon = document.createElement('i')
+            headerIcon.className = 'fa-solid fa-tower-broadcast'
+            const headerText = document.createElement('span')
+            headerText.textContent = 'Radio ' + (data.channel ?? '')
+            header.append(headerIcon, headerText)
+            radioList.appendChild(header)
+            for (const player of rows) {
+                const row = document.createElement('div')
+                row.className = 'radio-list-item' + (player.self ? ' self' : '') + (player.talking ? ' talking' : '')
+                row.textContent = player.name
+                radioList.appendChild(row)
+            }
+        }
     }
 }
 
@@ -391,27 +446,6 @@ function updateWaypointChip(distStr) {
     }
 }
 
-function applyLogo(logoConfig) {
-    if (!logoConfig) return
-    const img         = document.getElementById('logoImg')
-    const placeholder = document.getElementById('logoPlaceholder')
-    const slot        = document.getElementById('comp-logo')
-    if (!img || !placeholder || !slot) return
-    if (logoConfig.transparentBg) {
-        slot.classList.remove('glass')
-    } else {
-        slot.classList.add('glass')
-    }
-    if (!logoConfig.url || logoConfig.url === '') { slot.classList.add('hidden'); return }
-    if (logoConfig.width)  slot.style.setProperty('--logo-w', logoConfig.width  + 'px')
-    if (logoConfig.height) slot.style.setProperty('--logo-h', logoConfig.height + 'px')
-    img.src = logoConfig.url
-    img.classList.remove('hidden')
-    placeholder.classList.add('hidden')
-    img.onerror = () => { img.classList.add('hidden'); placeholder.classList.remove('hidden') }
-}
-
-
 const elWeaponCard       = document.getElementById('weaponCard')
 const elWeaponImg        = document.getElementById('weaponImg')
 const elWeaponIcon       = document.getElementById('weaponIcon')
@@ -436,7 +470,7 @@ const handlers = {
         if (data?.colors)     injectColors(data.colors)
         if (data?.thresholds) window.__cxThresh = data.thresholds
         if (data?.redline)    { redlineRpm = data.redline; buildRedlineMarker(redlineRpm) }
-        if (data?.logo)       applyLogo(data.logo)
+        if (data?.logo)       applyServerLogo(data.logo)
         if (data?.menuOptions) window.__menuOptions = data.menuOptions
         document.body.classList.toggle('jg-off', data?.jgMileage === false)
         hideMapAndStreetOnFoot = !!data?.hideMapAndStreetOnFoot
@@ -513,6 +547,10 @@ const handlers = {
         renderPsBuffRow()
     },
 
+    radioList(data) {
+        renderRadioList(data)
+    },
+
     updateStatus(data) {
         if (data.inVehicle !== undefined) {
             statusInVehicle = !!data.inVehicle
@@ -572,6 +610,34 @@ const handlers = {
         if (data.health !== undefined) setWarn(elCompHealth, elHealthBar, data.health, wt.health)
         if (data.hunger !== undefined) setWarn(elCompHunger, elHungerBar, data.hunger, wt.hunger)
         if (data.thirst !== undefined) setWarn(elCompThirst, elThirstBar, data.thirst, wt.thirst)
+    },
+
+    zoneCamera(data) {
+        // debug console log removed
+        const el = document.getElementById('comp-zone')
+        const ring = document.getElementById('zoneBar')
+        const ico = document.getElementById('zoneIco')
+        if (!el || !ring) return
+        const state = (data && data.state) || 'none'
+        if (state === 'green') {
+            el.classList.remove('hidden')
+            el.classList.remove('red')
+            el.classList.add('green')
+            if (ico) ico.className = 'fa-solid fa-video s-ico'
+            setRing(ring, 100)
+            el.title = (data && data.name) || 'Green Zone'
+        } else if (state === 'red') {
+            el.classList.remove('hidden')
+            el.classList.remove('green')
+            el.classList.add('red')
+            if (ico) ico.className = 'fa-solid fa-video s-ico'
+            setRing(ring, 100)
+            el.title = (data && data.name) || 'Red Zone'
+        } else {
+            el.classList.add('hidden')
+            el.classList.remove('green', 'red')
+            setRing(ring, 0)
+        }
     },
 
     updateVehicle(data) {

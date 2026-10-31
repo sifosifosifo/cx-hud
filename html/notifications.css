@@ -1,0 +1,187 @@
+.notify-wrapper {
+  position: fixed;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(420px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.notify-wrapper[data-position="top-left"] {
+  top: 20px;
+  left: 20px;
+}
+
+.notify-wrapper[data-position="top-center"] {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.notify-wrapper[data-position="top-right"] {
+  top: 20px;
+  right: 20px;
+}
+
+.notify-wrapper[data-position="middle-left"] {
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+}
+
+.notify-wrapper[data-position="center"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.notify-wrapper[data-position="middle-right"] {
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+
+.notify-wrapper[data-position="bottom-left"] {
+  bottom: 20px;
+  left: 20px;
+  flex-direction: column-reverse;
+}
+
+.notify-wrapper[data-position="bottom-center"] {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: column-reverse;
+}
+
+.notify-wrapper[data-position="bottom-right"] {
+  right: 20px;
+  bottom: 20px;
+  flex-direction: column-reverse;
+}
+
+.notify {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 82px;
+  max-height: 82px;
+  padding: 14px 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(18, 24, 38, 0.96), rgba(10, 15, 24, 0.96));
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  opacity: 0;
+  pointer-events: none;
+  animation: notifyIn .35s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+.notify.success { border-top-color: rgba(126, 232, 202, .45); }
+.notify.error { border-top-color: rgba(255, 107, 129, .5); }
+.notify.warning { border-top-color: rgba(255, 209, 102, .5); }
+.notify.info { border-top-color: rgba(108, 175, 255, .5); }
+
+.notify-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notify-tag {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font: 700 10px monospace;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+
+.notify.success .notify-tag {
+  border: 1px solid rgba(126, 232, 202, .25);
+  background: rgba(126, 232, 202, .12);
+  color: #7ee8ca;
+}
+
+.notify.error .notify-tag {
+  border: 1px solid rgba(255, 107, 129, .25);
+  background: rgba(255, 107, 129, .12);
+  color: #ff6b81;
+}
+
+.notify.warning .notify-tag {
+  border: 1px solid rgba(255, 209, 102, .25);
+  background: rgba(255, 209, 102, .12);
+  color: #ffd166;
+}
+
+.notify.info .notify-tag {
+  border: 1px solid rgba(108, 175, 255, .25);
+  background: rgba(108, 175, 255, .12);
+  color: #6cafff;
+}
+
+.notify-time {
+  margin-left: auto;
+  color: #7a87a4;
+  font: 11px monospace;
+}
+
+.notify-text {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  color: #d9d9d9;
+  font: 13px/1.45 'Inter', sans-serif;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+}
+
+.notify-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  opacity: .9;
+}
+
+.notify.success .notify-bar { background: #7ee8ca; }
+.notify.error .notify-bar { background: #ff6b81; }
+.notify.warning .notify-bar { background: #ffd166; }
+.notify.info .notify-bar { background: #6cafff; }
+
+@keyframes notifyIn {
+  from { opacity: 0; transform: translateY(-18px) scale(.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes notifyOut {
+  to { opacity: 0; transform: translateY(-12px) scale(.97); }
+}
+
+.notify-wrapper[data-position^="bottom"] .notify {
+  animation-name: notifyInBottom;
+}
+
+.notify-wrapper[data-position^="bottom"] .notify.is-closing {
+  animation-name: notifyOutBottom;
+}
+
+.notify.is-closing {
+  animation: notifyOut .3s ease forwards;
+}
+
+@keyframes notifyInBottom {
+  from { opacity: 0; transform: translateY(18px) scale(.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes notifyOutBottom {
+  to { opacity: 0; transform: translateY(12px) scale(.97); }
+}

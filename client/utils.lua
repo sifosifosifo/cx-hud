@@ -40,13 +40,13 @@ return function(Config)
     local function headingToCompass(deg)
         local norm = deg % 360
         if norm < 22.5 or norm >= 337.5 then return 'N'
-        elseif norm < 67.5  then return 'NW'
-        elseif norm < 112.5 then return 'W'
-        elseif norm < 157.5 then return 'SW'
+        elseif norm < 67.5  then return 'NE'
+        elseif norm < 112.5 then return 'E'
+        elseif norm < 157.5 then return 'SE'
         elseif norm < 202.5 then return 'S'
-        elseif norm < 247.5 then return 'SE'
-        elseif norm < 292.5 then return 'E'
-        else                     return 'NE'
+        elseif norm < 247.5 then return 'SW'
+        elseif norm < 292.5 then return 'W'
+        else                     return 'NW'
         end
     end
 

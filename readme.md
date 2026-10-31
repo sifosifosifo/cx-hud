@@ -15,6 +15,7 @@ A modern, highly customizable, and lightweight HUD for **Qbox** and **QBCore** F
 ## Features
 
 * **In-Game Settings Menu:** Players can type `/hud` to toggle individual HUD elements, change their avatar, and switch speed units (MPH/KMH) & More - All saves locally per player!
+* **Integrated Notifications:** Adjust notification volume and choose from nine on-screen positions in the `/hud` settings. Notifications render above cx-hud elements.
 
 * **In-Game UI Editor** New Feature as of 14th April 26' - do /hud and click `Edit Layout` to use our new editor!
 
@@ -77,6 +78,7 @@ This opens the settings panel where players can:
 * Paste an image URL to set a custom character portrait.
 * Hide/Show the player card, minimap, status rings, or vehicle HUD.
 * Toggle the cinematic black bars.
+* Adjust notification sound volume and choose where notifications appear.
 
 ## Server Default Layout
 

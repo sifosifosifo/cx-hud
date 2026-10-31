@@ -1,4 +1,6 @@
 return function(State, Utils, isReady, Config)
+
+
     local squaremapLoaded = false
     local mapPatched      = false
     local mmOffsetX       = 0.0
@@ -142,6 +144,38 @@ return function(State, Utils, isReady, Config)
     local lastShow    = nil
     local minimapVisible = true
     local hudVisible     = true
+
+    local activeWaypoint
+    local activeWaypointX
+    local activeWaypointY
+
+    CreateThread(function()
+        while true do
+            Wait(500)
+
+            local waypoint = GetFirstBlipInfoId(8)
+            if DoesBlipExist(waypoint) then
+                local coords = GetBlipInfoIdCoord(waypoint)
+                if waypoint ~= activeWaypoint or coords.x ~= activeWaypointX or coords.y ~= activeWaypointY then
+                    if activeWaypoint and activeWaypoint ~= waypoint and DoesBlipExist(activeWaypoint) then
+                        SetBlipRoute(activeWaypoint, false)
+                    end
+
+                    SetBlipRoute(waypoint, true)
+                    activeWaypoint = waypoint
+                    activeWaypointX = coords.x
+                    activeWaypointY = coords.y
+                end
+            else
+                if activeWaypoint and DoesBlipExist(activeWaypoint) then
+                    SetBlipRoute(activeWaypoint, false)
+                end
+                activeWaypoint = nil
+                activeWaypointX = nil
+                activeWaypointY = nil
+            end
+        end
+    end)
 
     CreateThread(function()
         while true do

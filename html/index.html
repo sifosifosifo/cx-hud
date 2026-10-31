@@ -13,13 +13,21 @@
   <link rel="stylesheet" href="vehicle.css" />
   <link rel="stylesheet" href="menu.css" />
   <link rel="stylesheet" href="editor.css" />
+  <link rel="stylesheet" href="radio-list.css" />
+  <link rel="stylesheet" href="notifications.css" />
 </head>
 <body>
 
   <div class="cinebar cinebar-top hidden"    id="cinebarTop"></div>
   <div class="cinebar cinebar-bottom hidden" id="cinebarBottom"></div>
+  <div id="notifyWrapper" class="notify-wrapper" data-position="top-center" aria-live="polite"></div>
 
   <div id="hud" class="hidden">
+
+    <div class="server-logo" id="comp-logo">
+      <img id="logoImg" class="logo-img hidden" src="" alt="Server logo">
+      <span class="logo-placeholder hidden" id="logoPlaceholder"><i class="fa-solid fa-shield-halved"></i></span>
+    </div>
 
     <div class="top-left">
       <div class="glass tl-card">
@@ -43,11 +51,6 @@
 
     <div class="top-right">
 
-      <div class="tr-logo glass" id="comp-logo">
-        <img id="logoImg" class="logo-img hidden" src="" alt="">
-        <span class="logo-placeholder hidden" id="logoPlaceholder"><i class="fa-solid fa-shield-halved"></i></span>
-      </div>
-
       <div class="glass tr-card job-card" id="comp-job">
         <div class="tr-ico-wrap"><i class="fa-solid fa-briefcase"></i></div>
         <div class="tr-meta">
@@ -68,6 +71,8 @@
       </div>
 
     </div>
+
+    <div class="radio-list-container hidden" id="radioList" aria-live="polite"></div>
 
     <div class="street-pill glass" id="streetPill">
         <div class="dir-badge" id="direction">N</div>
@@ -131,7 +136,6 @@
           </svg>
           <div class="s-inner"><i class="fa-solid fa-burger s-ico"></i></div>
         </div>
-
         <div class="status-pill thirst" id="comp-thirst" title="Thirst">
           <div class="pill-bg"></div>
           <svg class="s-ring-svg" viewBox="0 0 44 44">
@@ -168,8 +172,16 @@
           <div class="s-inner"><i class="fa-solid fa-lungs s-ico"></i></div>
         </div>
 
-    </div>
+        <div class="status-pill zone hidden" id="comp-zone" title="Zone">
+          <div class="pill-bg"></div>
+          <svg class="s-ring-svg" viewBox="0 0 44 44">
+            <circle class="s-ring-track" cx="22" cy="22" r="20"></circle>
+            <circle class="s-ring-fill"  cx="22" cy="22" r="20" id="zoneBar"/>
+          </svg>
+          <div class="s-inner"><i class="fa-solid fa-video s-ico" id="zoneIco"></i></div>
+        </div>
 
+    </div>
     <div class="status-row ps-buff-row vertical hidden" id="psBuffRow"></div>
 
     <div class="lights-panel hidden" id="lightsPanel">
@@ -262,6 +274,8 @@
 
   </div>
 
+  <!-- zoneCamera element removed; replaced by status-pill inside statusRow -->
+
   <div id="hudMenu" class="hidden">
     <div class="hud-menu-backdrop" id="menuBackdrop"></div>
     <div class="hud-menu-panel">
@@ -287,6 +301,7 @@
         <button class="menu-tab active" data-tab="general"><i class="fa-solid fa-user"></i><span>General</span></button>
         <button class="menu-tab" data-tab="map"><i class="fa-solid fa-map"></i><span>Map &amp; Status</span></button>
         <button class="menu-tab" data-tab="vehicle"><i class="fa-solid fa-car"></i><span>Vehicle</span></button>
+        <button class="menu-tab" data-tab="notifications"><i class="fa-solid fa-bell"></i><span>Notifications</span></button>
       </div>
 
       <div class="menu-content">
@@ -398,6 +413,10 @@
               <label class="toggle-switch"><input type="checkbox" id="tog-statusRow" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
             </label>
             <label class="hud-toggle-row">
+              <div class="hud-toggle-label"><i class="fa-solid fa-tower-broadcast"></i><div><span>Radio List</span><small>Players on radio</small></div></div>
+              <label class="toggle-switch"><input type="checkbox" id="tog-radioList" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+            </label>
+            <label class="hud-toggle-row">
               <div class="hud-toggle-label"><i class="fa-solid fa-flask"></i><div><span>Buff Row</span><small>PS-Buffs icons</small></div></div>
               <label class="toggle-switch"><input type="checkbox" id="tog-psBuffRow" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
             </label>
@@ -449,6 +468,32 @@
           </div>
         </div>
 
+        <div class="menu-pane" id="pane-notifications">
+          <div class="pane-section-title"><i class="fa-solid fa-bell"></i> Notifications</div>
+          <div class="notify-settings">
+            <label class="notify-setting" for="notifyVolume">
+              <span>
+                <strong>Notification Volume</strong>
+                <small>Adjust the notification sound level</small>
+              </span>
+              <output id="notifyVolumeValue" for="notifyVolume">25%</output>
+            </label>
+            <input id="notifyVolume" class="notify-volume" type="range" min="0" max="100" step="1" value="25">
+            <label class="notify-position-label" for="notifyPosition">Notification Position</label>
+            <select id="notifyPosition" class="notify-position">
+              <option value="top-left">Top left</option>
+              <option value="top-center">Top center</option>
+              <option value="top-right">Top right</option>
+              <option value="middle-left">Center left</option>
+              <option value="center">Center</option>
+              <option value="middle-right">Center right</option>
+              <option value="bottom-left">Bottom left</option>
+              <option value="bottom-center">Bottom center</option>
+              <option value="bottom-right">Bottom right</option>
+            </select>
+          </div>
+        </div>
+
       </div>
 
       <div class="hud-menu-footer">
@@ -462,7 +507,9 @@
     </div>
   </div>
 
+  <script src="logo.js"></script>
   <script src="app.js"></script>
+  <script src="notifications.js"></script>
   <script src="vehicle.js"></script>
   <script src="hud-menu.js"></script>
   <script src="editor.js"></script>

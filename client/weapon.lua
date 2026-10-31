@@ -157,8 +157,8 @@ return function(State, Utils, isReady, Config)
                     lastAmmoByWeapon[hash] = ammoClip
                 end
             else
-                if GetResourceState('ox_inventory') == 'started' then
-                    local ok, item = pcall(exports.ox_inventory.getCurrentWeapon, exports.ox_inventory)
+                if GetResourceState('qb-inventory') == 'started' then
+                    local ok, item = pcall(exports.qb-inventory.getCurrentWeapon, exports.qb-inventory)
                     if ok and item and item.metadata then
                         local dur = tonumber(item.metadata.durability)
                         if dur ~= nil then

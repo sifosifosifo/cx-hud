@@ -2,7 +2,7 @@ Config = {}
 Config.Version = "1.2.6" -- Don't change this, it is used for version checking and update notifications.
 
 Config.DefaultVoice        = 'Normal'
-Config.ShowStress          = true
+Config.ShowStress          = false
 Config.StressThreshold     = 5
 Config.UpdateInterval      = 100
 Config.MenuCommand            = 'hud'
@@ -17,7 +17,7 @@ Config.HideMapAndStreetOnFoot = false
 Config.RedlineThreshold = 85
 
 -- jg-vehiclemileage integration
-Config.JGMileage = false
+Config.JGMileage = true
 
 -- Seatbelt settings
 Config.EnableSeatbelt    = true -- do u even want to use our seatbelt? if not set it to false
@@ -34,20 +34,28 @@ Config.WarnEngine  = 20
 Config.WarnAmmoClip = 5 -- ammo clip count below which the counter turns red
 
 Config.Logo = {
-    url            = 'https://cxsper.dev/assets/branding/logo.png',
-    width          = 120,
-    height         = 80,
+    enabled        = true,
+    url            = 'logo-animation-transparent.png', -- Local files are loaded from this resource's html folder.
+    width          = 200,
+    height         = 120,
+    scale          = 1.0,
+    position       = {
+        top         = 10, -- Percentage from the top of the screen.
+        left        = 50, -- Percentage from the left of the screen.
+    },
     transparentBg  = true,
+    zIndex         = 100,
 }
 
 -- Weapon item images (don't touch unless you know what you're doing)
 Config.InventoryImages = {
     autoDetect = true,
     inventories = {
-        { resource = 'ox_inventory',   path = 'nui://ox_inventory/web/images/%s' },
+        { resource = 'qb-inventory',   path = 'nui://qb-inventory/web/images/%s' },
         { resource = 'qb-inventory',   path = 'nui://qb-inventory/html/images/%s' },
         { resource = 'ps-inventory',   path = 'nui://ps-inventory/html/images/%s' },
         { resource = 'core_inventory', path = 'nui://core_inventory/html/img/%s' },
+        { resource = 'ox_inventory',   path = 'nui://ox_inventory/html/images/%s' },
     }
 }
 
@@ -66,6 +74,7 @@ Config.DefaultVisible = {
     streetclock   = true,
     streetCompass = true,
     statusRow     = true,
+    radioList     = true,
     psBuffRow     = true,
     health      = true,
     armor       = true,
@@ -74,7 +83,7 @@ Config.DefaultVisible = {
     vehicle     = true,
     lights      = true,
     cinebars    = false,
-    logo        = false,
+    logo        = true,
     weapon      = true,
 }
 
@@ -87,13 +96,14 @@ Config.MenuOptions = {
     playerid    = true,
     job         = true,
     cash        = true,
-    bank        = false,
+    bank        = true,
     minimap       = true,
     minimapBorder = true,
     streetPill    = true,
     streetclock   = true,
     streetCompass = true,
     statusRow     = true,
+    radioList     = true,
     psBuffRow     = true,
     health      = true,
     armor       = true,
@@ -102,7 +112,7 @@ Config.MenuOptions = {
     vehicle     = true,
     lights      = true,
     cinebars    = true,
-    logo        = true,
+    logo        = false,
     weapon      = true,
 }
 

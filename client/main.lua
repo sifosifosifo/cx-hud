@@ -71,3 +71,7 @@ exports('toggleHud', function()
         Vehicle.pushVehicle(true)
     end
 end)
+
+exports('sendRadioMessage', function(data)
+    SendNUIMessage({ action = 'radioList', data = data or {} })
+end)

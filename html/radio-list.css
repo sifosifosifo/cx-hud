@@ -1,0 +1,52 @@
+.radio-list-container {
+  position: absolute;
+  top: 20%;
+  right: calc(1% + var(--sz-inset-x));
+  min-width: 145px;
+  max-width: 260px;
+  padding: 6px 8px;
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  background: linear-gradient(160deg, var(--panel2), var(--panel));
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.55;
+  text-align: right;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.radio-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-bottom: 2px;
+  color: var(--accent);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.radio-list-item {
+  padding: 3px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.radio-list-item + .radio-list-item {
+  border-top: 1px solid var(--border2);
+}
+
+.radio-list-item.self {
+  color: var(--light-indicator);
+}
+
+.radio-list-item.talking {
+  color: var(--bank);
+}

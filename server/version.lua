@@ -4,7 +4,7 @@ local function CheckVersion()
 
     PerformHttpRequest(versionUrl, function(errorCode, result, headers)
         if errorCode == 200 and result then
-            local latestVersion = result:gsub("%s+", "")
+           local latestVersion = result:gsub("%s+", "")
             local currentVersion = Config.Version
 
             print("^5[CX Scripts]^7 Checking for updates...")
@@ -13,25 +13,26 @@ local function CheckVersion()
             if outdated then
                 print("^1[CX Scripts] WARNING: " .. resourceName .. " is outdated!^7")
                 print("^1[CX Scripts] Current Version: " .. currentVersion .. "^7")
-                print("^2[CX Scripts] Latest Version: " .. latestVersion .. "^7")
-                print("^3[CX Scripts] Please download the latest update from https://github.com/JustCxsper/cx-hud^7")
-                print("^3[CX Scripts] Join our Discord for support: https://discord.gg/XatzNXHeU3^7")
+          
+              print("^2[CX Scripts] Latest Version: " .. latestVersion .. "^7")
+        print("^3[CX Scripts] Please download the latest update from https://github.com/JustCxsper/cx-hud^7")
+              print("^3[CX Scripts] Join our Discord for support: https://discord.gg/XatzNXHeU3^7")
             else
                 print("^2[CX Scripts] " .. resourceName .. " is up to date (v" .. currentVersion .. ")^7")
-            end
-            TriggerClientEvent('cx-hud:versionResult', -1, currentVersion, latestVersion, outdated)
-        else
+             end
+           TriggerClientEvent('cx-hud:versionResult', -1, currentVersion, latestVersion, outdated)
+       else
             print("^1[CX Scripts] Could not reach the update server. Error Code: " .. errorCode .. "^7")
-        end
+      end
 
-        if GetResourceState('jg-stress-addon') ~= 'started' then
-            print("^5[CX HUD]^7 ^3jg-stress-addon not detected, stress system disabled^7")
-        else
-            print("^5[CX HUD]^7 jg-stress-addon detected, stress system ^2enabled^7")
-        end
+       if GetResourceState('jg-stress-addon') ~= 'started' then
+       print("^5[CX HUD]^7 ^3jg-stress-addon not detected, stress system disabled^7")
+       else
+           print("^5[CX HUD]^7 jg-stress-addon detected, stress system ^2enabled^7")
+       end
 
         local inventoryDetected = false
-        local inventories = { 'ox_inventory', 'qb-inventory', 'ps-inventory', 'core_inventory' }
+        local inventories = { 'qb-inventory', 'qb-inventory', 'ps-inventory', 'core_inventory' }
         for _, inv in ipairs(inventories) do
             if GetResourceState(inv) == 'started' then
                 print("^5[CX HUD]^7 Inventory detected for weapon images: ^2" .. inv .. "^7")

@@ -3,13 +3,11 @@
 # cx-hud
 A modern, highly customizable, and lightweight HUD for **Qbox** and **QBCore** FiveM servers.
 # HUD
-![HUD Preview v1.1.5](https://cxsper.dev/assets/cx-hud/images/ui.png)
+![HUD Preview v1.1.5](https://forum-cfx-re.akamaized.net/optimized/5X/1/9/9/b/199b67caa16ecc889a8542fa48526c5422b38a5b_2_690x387.jpeg)
 # UI Editor
-![Editor Preview v1.1.5](https://cxsper.dev/assets/cx-hud/images/editor.png)
+![Editor Preview v1.1.5](https://forum-cfx-re.akamaized.net/optimized/5X/3/6/a/a/36aa6d34a21b2d95ec3aca1cd18ec6449565ff80_2_690x387.jpeg)
 # Vehicle HUD
-![In Car Preview v1.1.5](https://cxsper.dev/assets/cx-hud/images/vehicle-hud.png)
-# Settings UI
-![Settings Preview v1.1.5](https://cxsper.dev/assets/cx-hud/images/settings.png)
+![In Car Preview v1.1.5](https://forum-cfx-re.akamaized.net/optimized/5X/1/8/5/0/1850db88e7eb0d015f08363913dd5934c827036b_2_690x387.jpeg)
 
 
 ## Features
